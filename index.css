@@ -1,9 +1,28 @@
-body{
- background: #333;
- color: #fff;
-}
+
 
 .navbar{
-  border-bottom: blue 3px solid;
-  opacity: 0.8;
+  border-bottom: #608e72 3px solid;
 }
+
+#header{
+   background: url('images/look4work.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed; 
+  min-height: 700px;
+
+}
+
+.form-control{
+  display: block;
+  margin-top: 250px;
+  width: 100%; 
+}
+
+.btn{
+  display: inline-flex;
+  margin-top: 280px;
+  margin-bottom: 15px;
+}
+
+
