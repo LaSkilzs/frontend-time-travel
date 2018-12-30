@@ -1,7 +1,7 @@
 
 
 .navbar{
-  border-bottom: #608e72 3px solid;
+  border-bottom: #316bb0 3px solid;
 }
 
 #header{
@@ -23,6 +23,26 @@
   display: inline-flex;
   margin-top: 280px;
   margin-bottom: 15px;
+}
+.header{
+  background: #316bb0;
+}
+.subtitle{
+  color: #316bb0;
+  font-style: italic;
+  font-size: 1.5rem;
+  text-align: left;
+  margin-top: 75px;
+}
+
+.maintitle{
+  color: #f4f4f4;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.form-control{
+  display: inline-flex;
 }
 
 
