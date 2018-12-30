@@ -35,21 +35,70 @@
   <!-- beginning of home section -->
   <section id="header">
     <div class="container">
+      <button class="homesection btn btn-outline-primary">Create Profile</button>
+      <button class="homesection btn btn-outline-success">Find Work</button>
     </div>
   </section>
   <!-- end of home section -->
+  <!-- Fun  Facts -->
+  <section id="funfacts">
+    <div class="container m-4">
+      <div class="card">
+        <div class="card-header">
+          Fetched Fact and Number
+        </div>
+        <div class="card-body">
+          <blockquote class="blockquote mb-0">
+            <p>Fetched Data</p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End of Fun Facts -->
   <!-- Single Page App -->
   <section id="main">
+    <header class=" title display-4">What job would you have held?</header>
     <div class="container">
       <div class="card">
         <div class="card-body">
-          <div class="d-inline-flex board">
-            <div class="logo">
-              <img src="images/logo-man.png" alt="">
+          <div class="row">
+            <div class="card col-5  mb-5">
+              <img class="m-5" src="images/logo2.png" alt="">
+              <div class="card-body ">
+                <h5 class="card-subtitle">What job would you have held?</h5>
+              </div>
             </div>
-            <div class="float-right">
-              <h1>Jobs Back Then</h1>
-              <p class="text-center">Where would you have worked??</p>
+            <div class="card col-7 mb-5">
+              <div class="card-body">
+                <h4 class="text-center">Job Openings by Industry:</h4>
+                <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    insert fetched data
+                    <span class="badge badge-primary badge-pill">0</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    insert fetched data
+                    <span class="badge badge-primary badge-pill">0</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    insert fetched data
+                    <span class="badge badge-primary badge-pill">0</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    insert fetched data
+                    <span class="badge badge-primary badge-pill">0</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    insert fetched data
+                    <span class="badge badge-primary badge-pill">0</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    insert fetched data
+                    <span class="badge badge-primary badge-pill">0</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
           <!-- search section -->
@@ -236,111 +285,59 @@
     </div>
   </section>
   <!-- End of single page App -->
-  <!-- profile section -->
-  <section class="profile">
-    <div class="header">
-      <h1 class="display-4 maintitle">Profile Page</h1>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="card col-4">
-          <img class="m-2" src="images/avatar.png" alt="">
-          <div class="card-body ">
-            <h4 class="card-subtitle">John Doe</h4>
-          </div>
-        </div>
-        <div class="card col-8">
-          <div class="card-body">
-            <h4>Profile Card: <span></span></h4>
-            <ul>
-              <li><span>Experience:</span> </li>
-              <li><span>Trade:</span></li>
-              <li><span>Desired Wage:</span></li>
-            </ul>
-            <div class="float-right">
-              <button class="btn-success">create new</button>
-              <button class="btn-warning">update</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- end of Profile Section -->
-      <div class="section-divider text-center mt-3">
-        <h1 class="display-4 subtitle">My Saved Jobs</h1>
-      </div>
-      <!-- Fetch Data -->
-      <div class="row card">
-        <div class="card-body">
-          <div class="">
-            <h2>Job Title</h2>
-            <h4>Industry</h4>
-            <p>Job Description</p>
-          </div>
-          <div class="float-right">
-            <button class="btn-success">show</button>
-            <button class="btn-primary">save</button>
-            <button class="btn-danger">delete</button>
-          </div>
-        </div>
-      </div>
-      <!-- end of fetched data -->
-  </section>
-  <!-- end of entire profile  section -->
-  <!-- begin of helpwanted section -->
   <section class="job">
-    <div class="header">
-      <h1 class="display-4 maintitle">Help Wanted</h1>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="card col-4">
-          <img class="m-2" src="images/railroad.jpeg" alt="">
-          <div class="card-body ">
-            <h4 class="card-subtitle">Industry: </h4>
-          </div>
-        </div>
-        <div class="card col-8">
-          <div class="card-body">
-            <h4>Workers Needed: <span></span></h4>
-            <ul>
-              <li><span>Gender:</span> </li>
-              <li><span>Age:</span></li>
-              <li><span>Hours:</span></li>
-              <li><span>Wage per Week:</span></li>
-              <li><span>Work Environment:</span></li>
-              <li><span>Skill Level:</span></li>
-              <li><span>HS Diploma:</span></li>
-              <li><span>Housing:</span></li>
-            </ul>
-            <div class="float-right">
-              <button class="btn-success">show</button>
-              <button class="btn-primary">save</button>
-            </div>
-          </div>
-        </div>
+    <!-- Header Card -->
+    <!-- <div class="header">
+      <h1 class="display-4 maintitle">Saved Jobs/ Searched Jobs / Latest Jobs</h1>
+    </div> -->
+    <!-- End Header Card -->
+    <!-- image Card -->
+    <!-- <div class="card col-5 mb-5">
+      <img class="m-2" src="images/railroad.jpeg" alt="">
+      <div class="card-body ">
+        <h4 class="card-subtitle">Fetched Industry </h4>
       </div>
-      <!-- end of Help Wanted Section -->
-      <div class="section-divider text-center mt-3">
-        <h1 class="display-4 subtitle">More Jobs</h1>
-      </div>
-      <!-- Fetch Data -->
-      <div class="row card">
-        <div class="card-body">
-          <div class="">
-            <h2>Job Title</h2>
-            <h4>Industry</h4>
-            <p>Job Description</p>
-          </div>
-          <div class="float-right">
-            <button class="btn-success">show</button>
-            <button class="btn-primary">save</button>
-            <button class="btn-danger">delete</button>
-          </div>
+    </div> -->
+    <!-- end image card -->
+    <!-- info card -->
+    <!-- <div class="card col-7 mb-5">
+      <div class="card-body">
+        <h4>Workers Needed</h4>
+        <ul>
+          <li><span>Gender:</span> Fetched </li>
+          <li><span>Age:</span> Fetched </li>
+          <li><span>Hours:</span> Fetched </li>
+          <li><span>Wage per Week:</span> Fetched </li>
+          <li><span>Work Environment:</span> Fetched </li>
+          <li><span>Skill Level:</span> Fetched </li>
+          <li><span>HS Diploma:</span> Fetched </li>
+          <li><span>Housing:</span> Fetched </li>
+        </ul>
+        <div class="float-right">
+          <button class="btn-success">show</button>
+          <button class="btn-primary">save</button>
         </div>
       </div>
-      <!-- end of fetch data section -->
+    </div> -->
+    <!-- end of info card -->
+    <!-- Job Card-->
+    <!-- <div class="row card">
+      <div class="card-body">
+        <div class="">
+          <h2>Fetched</h2>
+          <h4>Fetched</h4>
+          <p>Fetched</p>
+        </div>
+        <div class="float-right">
+          <button class="btn-success">show</button>
+          <button class="btn-primary">save</button>
+          <button class="btn-danger">delete</button>
+        </div>
+      </div>
+    </div> -->
+    <!-- Job Card -->
   </section>
-  <!-- end of entire help wanted section -->
+
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
