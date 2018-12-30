@@ -13,15 +13,17 @@
 
 }
 
+#main{
+  background-color: #316bb0;
+}
+
 .form-control{
   display: block;
-  margin-top: 250px;
   width: 100%; 
 }
 
 .btn{
   display: inline-flex;
-  margin-top: 280px;
   margin-bottom: 15px;
 }
 .header{
@@ -43,6 +45,10 @@
 
 .form-control{
   display: inline-flex;
+}
+
+.featured{
+  background: #f2d29f;
 }
 
 
