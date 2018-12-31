@@ -22,6 +22,35 @@ async function getProfileData() {
   return data;
 }
 
+async function getHelpwantedData() {
+  const response = await fetch('http://localhost:3000/api/v1/helpwanteds');
+  const data = await response.json();
+  return data;
+}
+
+getHelpwantedData().then(helpwanteds => {
+  helpwanted_list = new Array();
+
+  helpwanteds['helpwanteds']['data'].forEach(function (helpwanted) {
+    helpwanted_list.push(helpwanted['attributes'].location, helpwanted['attributes'].female, helpwanted['attributes'].wage_per_week, helpwanted['attributes'].housing_offered, helpwanted['attributes'].job_id, helpwanted['attributes'].industry_id, helpwanted['attributes'].profile_id)
+  });
+  console.log(helpwanted_list)
+})
+
+async function getIndustryData() {
+  const response = await fetch('http://localhost:3000/api/v1/industries');
+  const data = await response.json();
+  return data;
+}
+
+getIndustryData().then(industries => {
+  industry_list = new Array();
+  industries['data']['data'].forEach(function (industry) {
+    industry_list.push(industry['attributes'].name, industry['attributes'].summary)
+  });
+  console.log(industry_list)
+
+})
 // RETRIEVE DATA FROM PROMISES 
 
 getJobData().then(jobs => {
