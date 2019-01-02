@@ -18,9 +18,22 @@
 
 }
 
+.allfacts{
+  margin-left: 125px;
+  background: #f4f4f4;
+}
+
+.main-allfacts{
+  margin: 100px;
+  background: #316bb0;
+}
+.main{ 
+  background: #f4f4f4;
+}
+
 #main{
   background-color: #316bb0;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .title{
@@ -62,5 +75,3 @@
 .featured{
   background: #f2d29f;
 }
-
-

@@ -1,5 +1,20 @@
 // ONLOAD
 document.addEventListener('DOMContentLoaded', () => {
+  getIndustryData().then(industries => {
+    industry_list = new Array();
+    let output = '';
+
+    industries['data']['data'].forEach(function (industry) {
+      output += showTopIndustry(industry['attributes'].name, industry['attributes'].availablejobs)
+
+      industry_list.push({
+        "id": industry.id,
+        "name": industry['attributes'].name,
+        "availablejobs": industry['attributes'].availablejobs
+      })
+    });
+    // document.getElementById('industrystandings').innerHTML = output;
+  })
   getJobData().then(jobs => {
     latest_jobs = new Array();
     let feature = '';
@@ -20,21 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     changeHeaders();
 
   })
-  getIndustryData().then(industries => {
-    industry_list = new Array();
-    let output = '';
-
-    industries['data']['data'].forEach(function (industry) {
-      output += showTopIndustry(industry['attributes'].name, industry['attributes'].availablejobs)
-
-      industry_list.push({
-        "id": industry.id,
-        "name": industry['attributes'].name,
-        "availablejobs": industry['attributes'].availablejobs
-      })
-    });
-    document.getElementById('industrystandings').innerHTML = output;
-  })
   getFunFactData().then(facts => {
     funfacts = new Array();
     let output = ''
@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.allfacts').innerHTML = output;
   })
 });
+
 // GET ALL DATA
 async function getJobData() {
   const response = await fetch('http://localhost:3000/api/v1/jobs');
@@ -149,7 +150,7 @@ function showFeatureJob(title, industry, description) {
           <div class="float-right">
             <button class="btn-success">show</button>
             <button class="btn-primary">save</button>
-            <button class="btn-danger">delete</button>
+            <button class="btn-danger">remove</button>
           </div>
         </div>
       </div>
@@ -166,8 +167,7 @@ function showRegularJob(title, industry, description) {
       </div>
       <div class="float-right">
         <button class="btn-success">show</button>
-        <button class="btn-primary">save</button>
-        <button class="btn-danger">delete</button>
+        <button class="btn-danger">remove</button>
       </div>
     </div>
   </div>
@@ -202,5 +202,57 @@ function showFacts(id, fact) {
             ${fact}
       </blockquote>
     </div>
+  `)
+}
+
+// EVENT LISTENERS
+document.getElementById('homebtngreen').addEventListener('click', getHelpwantedData);
+
+getHelpwantedData().then(wantads => {
+  wantads_list = new Array();
+
+  wantads['helpwanteds']['data'].forEach(function (wantad) {
+    wantads_list.push({
+      'id': wantad.id,
+      'location': wantad['attributes'].location,
+      'female': wantad['attributes'].female,
+      'wage_per_week': wantad['attributes'].wage_per_week,
+      'housing_offered': wantad['attributes'].housing_offered,
+      'image': wantad['attributes'].image,
+      'job_id': wantad['attributes'].job_id,
+      'industry_id': wantad['attributes'].industry_id,
+      'profile_id': wantad['attributes'].profile_id
+    })
+  });
+  output = showHelpWantedData(wantads_list[0].location, wantads_list[0].female, wantads_list[0].wage_per_week, wantads_list[0].housing_offered, wantads_list[0].image)
+  document.getElementById('row').innerHTML = output;
+});
+
+function showHelpWantedData(gender, age, wage_per_week, skill_level, housing, image) {
+  return (`
+    <div class="card col-5 mb-5">
+      <img class="m-2" src=${image} alt=""></img>
+      <div class="card-body ">
+        <h4 class="card-subtitle"> </h4>
+      </div>
+    </div>
+    <div class="card col-7 mb-5">
+      <div class="card-body">
+        <h4>Workers Needed</h4>
+        <ul>
+          <li><span>Gender:</span> ${gender} </li>
+          <li><span>Age:</span> ${age} </li>
+          <li><span>Hours:</span>$($hours) </li>
+          <li><span>Wage per Week:</span> ${wage_per_week} </li>
+          <li><span>Work Environment:</span> ${skill_level} </li>
+          <li><span>HS Diploma:</span>  </li>
+          <li><span>Housing:</span> ${housing} </li>
+        </ul>
+        <div class="float-right">
+          <button class="btn-success">apply</button>
+          <button class="btn-primary">save</button>
+        </div>
+      </div>
+    </div> 
   `)
 }
