@@ -10,9 +10,41 @@ const switchprofile = document.getElementById('profile');
 // Home State
 const homeState = function (page) {
   document.querySelector('#title').textContent = 'Job Seekers';
+
   getIndustryData().then(function (result) {
-    industryData(result.data);
+    industryData(result.data.data);
   })
+  getIndustryData().then(industries => {
+
+    industries['data']['data'].forEach(function (industry) {
+      industry_list.push({
+        "id": industry.id,
+        "name": industry['attributes'].name,
+        "availablejobs": industry['attributes'].availablejobs
+      })
+    });
+    // debugger
+    return industryData(industry_list);
+  });
+  getJobData().then(jobs => {
+    latest_jobs = new Array();
+    let feature = '';
+    let output = '';
+    jobs['data']['data'].forEach(function (job) {
+      latest_jobs.push({
+        "id": job.id,
+        "title": job['attributes'].name,
+        "industry": industry_list[job['attributes'].industry_id - 1].name,
+        "description": job['attributes'].job_description
+      });
+    })
+
+    feature = showFeatureJob(latest_jobs[0].title, latest_jobs[0].industry, latest_jobs[0].description);
+
+    document.querySelector('.space-maker').innerHTML = feature;
+    getFiveJobs();
+  });
+
 }
 // Profile State
 const profileState = function (page) {
@@ -36,8 +68,24 @@ const workState = function (page) {
   getHelpwantedData().then(function (result) {
     wantadData(result.helpwanteds)
   });
-}
 
+}
+getHelpwantedData().then(wantads => {
+  wantads['helpwanteds']['data'].forEach(function (wantad) {
+    wantads_list.push({
+      'id': wantad.id,
+      'location': wantad['attributes'].location,
+      'female': wantad['attributes'].female,
+      'wage_per_week': wantad['attributes'].wage_per_week,
+      'housing_offered': wantad['attributes'].housing_offered,
+      'image': wantad['attributes'].image,
+      'job_id': wantad['attributes'].job_id,
+      'industry_id': wantad['attributes'].industry_id,
+      'profile_id': wantad['attributes'].profile_id
+    })
+  });
+  return wantadData(wantads_list);
+});
 // STATE MANAGEMENT FUNCTION
 const PageState = function () {
   let currentState = new homeState(this);
@@ -68,7 +116,6 @@ switchwork.addEventListener('click', (e) => {
 
   e.preventDefault();
 })
-
 // Contact
 switchprofile.addEventListener('click', (e) => {
   page.change(new profileState);
@@ -114,91 +161,48 @@ async function getApplicationData() {
 }
 
 // PROMISES FROM FETCH
-
-getHelpwantedData().then(wantads => {
-  wantads['helpwanteds']['data'].forEach(function (wantad) {
-    wantads_list.push({
-      'id': wantad.id,
-      'location': wantad['attributes'].location,
-      'female': wantad['attributes'].female,
-      'wage_per_week': wantad['attributes'].wage_per_week,
-      'housing_offered': wantad['attributes'].housing_offered,
-      'image': wantad['attributes'].image,
-      'job_id': wantad['attributes'].job_id,
-      'industry_id': wantad['attributes'].industry_id,
-      'profile_id': wantad['attributes'].profile_id
+getFunFactData().then(facts => {
+  funfacts = new Array();
+  let output = ''
+  facts['data']['data'].forEach(function (fact) {
+    funfacts.push({
+      "id": fact.id,
+      "fact": fact['attributes'].fact
     })
   });
-  return wantadData(wantads_list);
+  output = showFacts(funfacts[3].id, funfacts[8].fact);
+  document.querySelector('.allfacts').innerHTML = output;
 });
-getIndustryData().then(industries => {
-  industries['data']['data'].forEach(function (industry) {
-    industry_list.push({
-      "id": industry.id,
-      "name": industry['attributes'].name,
-      "availablejobs": industry['attributes'].availablejobs
-    })
-  });
-  return industryData(industry_list);
-});
-getJobData().then(jobs => {
-  latest_jobs = new Array();
-  let feature = '';
-  let output = '';
-  jobs['data']['data'].forEach(function (job) {
-    latest_jobs.push({
-      "id": job.id,
-      "title": job['attributes'].name,
-      "industry": industry_list[job['attributes'].industry_id - 1].name,
-      "description": job['attributes'].job_description
-    });
-  })
-
-  feature = showFeatureJob(latest_jobs[0].title, latest_jobs[0].industry, latest_jobs[0].description);
-
-  document.querySelector('.space-maker').innerHTML = feature;
-  getFiveJobs();
-  changeHeaders();
-
-});
-// getFunFactData().then(facts => {
-//   funfacts = new Array();
-//   let output = ''
-//   facts['data']['data'].forEach(function (fact) {
-//     funfacts.push({
-//       "id": fact.id,
-//       "fact": fact['attributes'].fact
-//     })
-//   });
-//   output = showFacts(funfacts[3].id, funfacts[8].fact);
-//   document.querySelector('.allfacts').innerHTML = output;
-// });
 
 function showTopIndustry(name, availablejobs) {
-
   return (`
+
     <li class="list-group-item d-flex justify-content-between align-items-center">
       ${name}
       <span class="badge badge-primary badge-pill">${availablejobs}</span></li>
   `)
-
 }
-
 function industryimage(image) {
-  document.querySelector('#content').innerHTML = ` 
-<div class="row">
-  <div class="card col-5  mb-3">
-    <img class="m-5" src="images/railroad.jpeg" alt="">
-    <div class="card-body ">
-      <h5 class="card-subtitle">What job would you have held?</h5>
+  return (`
+  <div class="row">
+    <div class="card col-4 mb-5">
+      <img class="m-2" src="images/kindred.jpg" alt=""></img>
+      <div class="card-body ">
+        <h4 class="card-subtitle"> </h4>
+      </div>
     </div>
-  </div >
-
-  <div class="card col-7 mb-3">
-    <div class="card-body">
-    <h4 class="text-center">Top Industry Openings:</h4>
-    </div>
-    `;
+    <div class="card col-8 mb-5">
+      <div class="card-body">
+        <h4>Top Industry Openings</h4>
+        <ul>
+           <li class="list-group-item d-flex justify-content-between align-items-center">
+      ${name}
+      <span class="badge badge-primary badge-pill">${availablejobs}</span></li>
+        </ul>
+      </div>
+      </div>
+    </div> 
+  `)
 }
 function showFeatureJob(title, industry, description) {
   return (`
@@ -267,15 +271,17 @@ function showFacts(id, fact) {
     </div>
   `)
 }
-
 function industryData(industry_list) {
   let output = '';
-  // industry_list['data'].forEach(function (industry) {
-  //   output += showTopIndustry(industry['attributes'].name, industry['attributes'].availablejobs)
-  // });
-  // document.getElementById('content').innerHTML = output;
-}
 
+  industry_list.forEach(function (industry) {
+    output += showTopIndustry(industry['attributes'].name, industry['attributes'].availablejobs, industry['attributes'].image)
+
+  });
+
+  document.getElementById('content').innerHTML = output;
+
+}
 function wantadData(wantads_list, id) {
   let output = '';
   for (var wantad in wantads_list) {
@@ -288,8 +294,6 @@ function wantadData(wantads_list, id) {
 
   document.getElementById('content').innerHTML = output;
 }
-
-
 function showHelpWantedData(gender, age, hours, wage_per_week, environment, education, housing, image) {
   return (`
   <div class="row">
