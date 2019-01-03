@@ -29,6 +29,22 @@ const homeState = function (page) {
     document.getElementById('industrystandings').innerHTML = output;
 
   });
+  getJobData().then(jobs => {
+    let feature = '';
+    jobs['data']['data'].forEach(function (job) {
+      latest_jobs.push({
+        "id": job.id,
+        "title": job['attributes'].name,
+        "industry": industry_list[job['attributes'].industry_id - 1].name,
+        "description": job['attributes'].job_description
+      });
+    })
+
+    feature = showFeatureJob(latest_jobs[0].title, latest_jobs[0].industry, latest_jobs[0].description);
+
+    document.querySelector('.space-maker').innerHTML = feature;
+    getFiveJobs();
+  });
 }
 
 // Profile State
@@ -52,28 +68,18 @@ const profileState = function (page) {
 // WorkState
 const workState = function (page) {
   document.getElementById('title').textContent = 'Help Wanted';
-  getHelpwantedData().then(function (result) {
-    wantadData(result.helpwanteds)
+
+  getHelpwantedData().then(wantads => {
+    let output = "";
+    wantads['helpwanteds']['data'].forEach(function (wantad) {
+      output += showHelpWantedData(wantad['attributes'].location, wantad['attributes'].female, wantad['attributes'].wage_per_week, wantad['attributes'].housing_offered, wantad['attributes'].image)
+    })
+    document.getElementById('content').innerHTML = output;
   });
 }
 
-getHelpwantedData().then(wantads => {
-  wantads['helpwanteds']['data'].forEach(function (wantad) {
-    wantads_list.push({
-      'id': wantad.id,
-      'location': wantad['attributes'].location,
-      'female': wantad['attributes'].female,
-      'wage_per_week': wantad['attributes'].wage_per_week,
-      'housing_offered': wantad['attributes'].housing_offered,
-      'image': wantad['attributes'].image,
-      'job_id': wantad['attributes'].job_id,
-      'industry_id': wantad['attributes'].industry_id,
-      'profile_id': wantad['attributes'].profile_id
-    })
-  });
-  // debugger
-  wantadData(wantads_list);
-});
+
+
 
 // STATE MANAGEMENT FUNCTION
 const PageState = function () {
@@ -113,7 +119,7 @@ switchprofile.addEventListener('click', (e) => {
 
 // GLOBAL DATA STORAGE VARIABLES
 let wantads_list = new Array();
-let job_list = new Array();
+let latest_jobs = new Array();
 let industry_list = new Array();
 let profile_list = new Array();
 
@@ -150,24 +156,7 @@ async function getApplicationData() {
 }
 
 // PROMISES FROM FETCH
-getJobData().then(jobs => {
-  latest_jobs = new Array();
-  let feature = '';
-  let output = '';
-  jobs['data']['data'].forEach(function (job) {
-    latest_jobs.push({
-      "id": job.id,
-      "title": job['attributes'].name,
-      "industry": industry_list[job['attributes'].industry_id - 1].name,
-      "description": job['attributes'].job_description
-    });
-  })
 
-  feature = showFeatureJob(latest_jobs[0].title, latest_jobs[0].industry, latest_jobs[0].description);
-
-  document.querySelector('.space-maker').innerHTML = feature;
-  getFiveJobs();
-});
 getFunFactData().then(facts => {
   funfacts = new Array();
   let output = ''
@@ -180,7 +169,6 @@ getFunFactData().then(facts => {
   output = showFacts(funfacts[3].id, funfacts[8].fact);
   document.querySelector('.allfacts').innerHTML = output;
 });
-
 function showTopIndustry(name, availablejobs) {
   return (`
 
@@ -195,15 +183,14 @@ function industryimage(name, availablejobs, image) {
     <div class="card col-5 mb-5">
       <img class="mt-5 pd-3" src="images/kindred.jpg" alt="" height: 100px;></img>
       <div class="card-body ">
-        <h4 class="card-subtitle">Find Your Next GiG!</h4>
-
+        <h4 class="card-subtitle">Find Your Next GiG</h4>
+        <button class="btn-success center ml-5 mt-5">apply today</button>
       </div>
     </div>
     <div class="card col-7 mb-5">
       <div class="card-body">
         <h4 class="text-center">Top Industry Openings:</h4>
         <ul id="industrystandings">
-
         </ul>
       </div>
     </div>
@@ -222,8 +209,7 @@ function showFeatureJob(title, industry, description) {
           </div>
           <div class="float-right">
             <button class="btn-success">show</button>
-            <button class="btn-primary">save</button>
-            <button class="btn-danger">remove</button>
+            <button class="btn-primary">apply</button>
           </div>
         </div>
       </div>
@@ -240,7 +226,7 @@ function showRegularJob(title, industry, description) {
       </div>
       <div class="float-right">
         <button class="btn-success">show</button>
-        <button class="btn-danger">remove</button>
+        <button class="btn-primary">apply</button>
       </div>
     </div>
   </div>
@@ -285,44 +271,23 @@ function showFacts(id, fact) {
     </div>
   `)
 }
-function wantadData(wantads_list, id) {
-  let output = '';
-  for (wantad of wantads_list) {
-    let output = '';
-    if (id === wantad.id) {
-      output = showHelpWantedData(wantad.female, wantad.location, wantad.wage_per_week, wantad.image);
-    } else {
-      output = showHelpWantedData(wantad.gender, wantad.hours, wantad.wage_per_week);
-    }
-  }
 
-
-  document.getElementById('content').innerHTML = output;
-}
-function showHelpWantedData(gender, age, hours, wage_per_week, environment, education, housing, image) {
+function showHelpWantedData(location, female, wage_per_week, housing_offered, image) {
   return (`
-  <div class="row">
-    <div class="card col-5 mb-5">
-      <img class="m-2" src="images/railroad.jpeg"alt=""></img>
-      <div class="card-body ">
-        <h4 class="card-subtitle"> </h4>
-      </div>
-    </div>
-    <div class="card col-7 mb-5">
+ 
+    <div class="card col-12 mb-5">
       <div class="card-body">
         <h4>Workers Needed</h4>
         <ul>
-          <li><span style="font-weight: bold;">Gender:</span> ${gender} </li>
-          <li><span "font-weight: bold;">Age:</span> ${age} </li>
-          <li><span "font-weight: bold;">Hours:</span>${hours} </li>
+          <li><span style="font-weight: bold;">Location:</span> ${location} </li>
+          <li><span "font-weight: bold;">Female:</span> ${female} </li>
           <li "font-weight: bold;"><span>Wage per Week:</span> ${wage_per_week} </li>
-          <li "font-weight: bold;"><span>Location:</span> ${environment} </li>
-          <li "font-weight: bold;"><span>HS Diploma:</span> ${education} </li>
-          <li><span "font-weight: bold;">Housing:</span> ${housing} </li>
+          <li "font-weight: bold;"><span>Housing Offered:</span> ${housing_offered} </li>
         </ul>
         <div class="float-right">
-          <button class="btn-success">apply</button>
-          <button class="btn-primary">save</button>
+          <button class="btn-success data-toggle="modal"
+            data-target="#exampleModal2"">apply</button>
+          <button class="btn-primary">show</button>
         </div>
       </div>
       </div>
@@ -353,8 +318,8 @@ function showProfileData(name, education, gender, experience, trade, availablefo
         <br>
         <br>
         <div class="float-right">
-          <button class="btn-success">apply</button>
-          <button class="btn-primary">save</button>
+          <button class="btn-success">new</button>
+          <button class="btn-primary">edit</button>
         </div>
       </div>
       </div>
