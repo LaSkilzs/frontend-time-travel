@@ -10,13 +10,14 @@ const switchprofile = document.getElementById('profile');
 // Home State
 const homeState = function (page) {
   document.querySelector('#title').textContent = 'Job Seekers';
-
-  getIndustryData().then(function (result) {
-    industryData(result.data.data);
-  })
   getIndustryData().then(industries => {
-
+    let output = '';
     industries['data']['data'].forEach(function (industry) {
+
+      output += showTopIndustry(industry['attributes'].name, industry['attributes'].availablejobs, industry['attributes'].image);
+
+      imageOutput = industryimage(industry['attributes'].image);
+      // debugger
       industry_list.push({
         "id": industry.id,
         "name": industry['attributes'].name,
@@ -24,52 +25,38 @@ const homeState = function (page) {
       })
     });
     // debugger
-    return industryData(industry_list);
+    document.getElementById('content').innerHTML = imageOutput;
+    document.getElementById('industrystandings').innerHTML = output;
+
   });
-  getJobData().then(jobs => {
-    latest_jobs = new Array();
-    let feature = '';
-    let output = '';
-    jobs['data']['data'].forEach(function (job) {
-      latest_jobs.push({
-        "id": job.id,
-        "title": job['attributes'].name,
-        "industry": industry_list[job['attributes'].industry_id - 1].name,
-        "description": job['attributes'].job_description
-      });
-    })
-
-    feature = showFeatureJob(latest_jobs[0].title, latest_jobs[0].industry, latest_jobs[0].description);
-
-    document.querySelector('.space-maker').innerHTML = feature;
-    getFiveJobs();
-  });
-
 }
+
 // Profile State
 const profileState = function (page) {
   document.getElementById('title').textContent = 'Profile Page'
-  document.getElementById('content').innerHTML = `
-  <div id="row" class="row">
-      <div class="card col-5  mb-3">
-      <img class="m-5" src="images/avatar.png" alt="">
-      <div class="card-body ">
-      <h5 class="card-subtitle">Name</h5>
-      </div>
-      </div>
-      <div class="card col-7 mb-3">
-      <div class="card-body">
-      <h4 class="text-center">Work Experience:</h4>
-    </div>`;
+
+  getProfileData().then(profiles => {
+    profile_list = profiles;
+    let output = '';
+    profiles['profiles']['data'].forEach(function (profile) {
+
+      if ("1" === profile.id) {
+        output = showProfileData(profile['attributes'].name, profile['attributes'].education, profile['attributes'].gender, profile['attributes'].experience, profile['attributes'].trade, profile['attributes'].availableforwork)
+      }
+    })
+    document.getElementById('content').innerHTML = output;
+  });
+
 }
+
 // WorkState
 const workState = function (page) {
   document.getElementById('title').textContent = 'Help Wanted';
   getHelpwantedData().then(function (result) {
     wantadData(result.helpwanteds)
   });
-
 }
+
 getHelpwantedData().then(wantads => {
   wantads['helpwanteds']['data'].forEach(function (wantad) {
     wantads_list.push({
@@ -84,8 +71,10 @@ getHelpwantedData().then(wantads => {
       'profile_id': wantad['attributes'].profile_id
     })
   });
-  return wantadData(wantads_list);
+  // debugger
+  wantadData(wantads_list);
 });
+
 // STATE MANAGEMENT FUNCTION
 const PageState = function () {
   let currentState = new homeState(this);
@@ -161,6 +150,24 @@ async function getApplicationData() {
 }
 
 // PROMISES FROM FETCH
+getJobData().then(jobs => {
+  latest_jobs = new Array();
+  let feature = '';
+  let output = '';
+  jobs['data']['data'].forEach(function (job) {
+    latest_jobs.push({
+      "id": job.id,
+      "title": job['attributes'].name,
+      "industry": industry_list[job['attributes'].industry_id - 1].name,
+      "description": job['attributes'].job_description
+    });
+  })
+
+  feature = showFeatureJob(latest_jobs[0].title, latest_jobs[0].industry, latest_jobs[0].description);
+
+  document.querySelector('.space-maker').innerHTML = feature;
+  getFiveJobs();
+});
 getFunFactData().then(facts => {
   funfacts = new Array();
   let output = ''
@@ -182,26 +189,25 @@ function showTopIndustry(name, availablejobs) {
       <span class="badge badge-primary badge-pill">${availablejobs}</span></li>
   `)
 }
-function industryimage(image) {
+function industryimage(name, availablejobs, image) {
   return (`
   <div class="row">
-    <div class="card col-4 mb-5">
-      <img class="m-2" src="images/kindred.jpg" alt=""></img>
+    <div class="card col-5 mb-5">
+      <img class="mt-5 pd-3" src="images/kindred.jpg" alt="" height: 100px;></img>
       <div class="card-body ">
-        <h4 class="card-subtitle"> </h4>
+        <h4 class="card-subtitle">Find Your Next GiG!</h4>
+
       </div>
     </div>
-    <div class="card col-8 mb-5">
+    <div class="card col-7 mb-5">
       <div class="card-body">
-        <h4>Top Industry Openings</h4>
-        <ul>
-           <li class="list-group-item d-flex justify-content-between align-items-center">
-      ${name}
-      <span class="badge badge-primary badge-pill">${availablejobs}</span></li>
+        <h4 class="text-center">Top Industry Openings:</h4>
+        <ul id="industrystandings">
+
         </ul>
       </div>
-      </div>
-    </div> 
+    </div>
+  </div>
   `)
 }
 function showFeatureJob(title, industry, description) {
@@ -247,6 +253,14 @@ function getFiveJobs() {
   }
   document.querySelector('.employmentsection').innerHTML = output;
 }
+function getFiveHelpwanteds() {
+  let output = '';
+  helpwanted_list
+  for (let i = 0; i < 5; i++) {
+    output += showRegularJob(latest_jobs[i].title, latest_jobs[i].industry, latest_jobs[i].description)
+  }
+  // document.querySelector('.employmentsection').innerHTML = output;
+}
 function showHeaders(header) {
   return (`
     <div class="helpwanted">
@@ -271,26 +285,17 @@ function showFacts(id, fact) {
     </div>
   `)
 }
-function industryData(industry_list) {
-  let output = '';
-
-  industry_list.forEach(function (industry) {
-    output += showTopIndustry(industry['attributes'].name, industry['attributes'].availablejobs, industry['attributes'].image)
-
-  });
-
-  document.getElementById('content').innerHTML = output;
-
-}
 function wantadData(wantads_list, id) {
   let output = '';
-  for (var wantad in wantads_list) {
-    if (id && id === wantads_list[id]) {
-      output = showHelpWantedData(wantad.gender, wantad.age, wantad.hours, wantad.wage_per_week, wantad.environment, wantad.education, wantad.housing);
+  for (wantad of wantads_list) {
+    let output = '';
+    if (id === wantad.id) {
+      output = showHelpWantedData(wantad.female, wantad.location, wantad.wage_per_week, wantad.image);
     } else {
-      output = showHelpWantedData(wantad.gender, wantad.age, wantad.hours, wantad.wage_per_week, wantad.environment, wantad.education, wantad.housing);
+      output = showHelpWantedData(wantad.gender, wantad.hours, wantad.wage_per_week);
     }
   }
+
 
   document.getElementById('content').innerHTML = output;
 }
@@ -322,5 +327,38 @@ function showHelpWantedData(gender, age, hours, wage_per_week, environment, educ
       </div>
       </div>
     </div> 
+  `)
+}
+function showProfileData(name, education, gender, experience, trade, availableforwork) {
+  return (`
+  <div class="row">
+  <div class="card col-5  mb-3">
+      <img class="m-5" src="images/avatar.png" alt="">
+      <div class="card-body ">
+      <h5 class="card-subtitle">${name}</h5>
+      </div>
+      </div>
+      <div class="card col-7 mb-3">
+      <div class="card-body">
+      <h4 class="text-center">Work Experience:</h4>
+      <br>
+      <br>
+        <ul>
+          <li><span style="font-weight: bold;">Education:</span> ${education} </li>
+          <li><span style="font-weight: bold;">Gender:</span> ${gender} </li>
+          <li><span style="font-weight: bold;">Experience:</span>${experience} </li>
+          <li style="font-weight: bold;"><span>Know Trade:</span> ${trade} </li>
+          <li style="font-weight: bold;"><span>Available:</span> ${availableforwork} </li>
+        </ul>
+        <br>
+        <br>
+        <div class="float-right">
+          <button class="btn-success">apply</button>
+          <button class="btn-primary">save</button>
+        </div>
+      </div>
+      </div>
+    </div> 
+    </div>
   `)
 }
